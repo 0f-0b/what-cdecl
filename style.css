@@ -1,0 +1,31 @@
+body {
+  background-color: lightyellow;
+  font-family: sans-serif;
+}
+
+.layer {
+  font-size: small;
+  background-color: darkgray;
+  padding: 0px 2px;
+  margin: 2px;
+  border: 1px solid gray;
+  border-radius: 4px;
+}
+
+.removable::after {
+  content: " ✕";
+}
+
+.correct::after {
+  content: " ✓";
+  color: green;
+}
+
+.insertable::before {
+  content: "+ ";
+}
+
+.another {
+  margin: 4px;
+  border-radius: 4px;
+}
