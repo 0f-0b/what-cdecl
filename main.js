@@ -128,7 +128,7 @@ class LayersInput extends React.Component {
     return e("div", null,
       e("span", { className: layers.length === expected.length && layers.every((layer, index) => layer === expected[index]) ? "correct" : null },
         "instances of ",
-        e("var", null, e("code", null, name)),
+        e("var", null, e("code", null, highlight(name, "hl-variable"))),
         " are ",
         layers.map((layer, index) => e("button", {
           key: index,
@@ -138,7 +138,7 @@ class LayersInput extends React.Component {
             return onUpdate(layers);
           }
         }, descriptions.get(layer))),
-        e("code", null, root),
+        e("code", null, highlight(root, "hl-type")),
         "s"),
       e("br"),
       e("span", null, available.map((layer, index) => e("button", {
