@@ -19,6 +19,10 @@ const primitives = [
   "long double"
 ];
 
+function highlight(str, type) {
+  return e("span", { className: type }, str);
+}
+
 function addParentheses(before, after) {
   if (before[before.length - 1] !== "*") return;
   before.push("(");
@@ -48,7 +52,7 @@ class ArrayLayer {
 
   apply(before, after) {
     addParentheses(before, after);
-    after.push("[", this.length, "]");
+    after.push("[", highlight(this.length, "hl-number"), "]");
   }
 }
 
@@ -63,7 +67,15 @@ class FunctionLayer {
 
   apply(before, after) {
     addParentheses(before, after);
-    after.push("(", this.args.join(", "), ")");
+    after.push("(");
+    const args = this.args;
+    const argCount = args.length;
+    if (argCount) {
+      after.push(highlight(args[0], "hl-type"));
+      for (let i = 1; i < argCount; i++)
+        after.push(", ", highlight(args[i], "hl-type"));
+    }
+    after.push(")");
   }
 }
 
@@ -91,7 +103,15 @@ class Cdecl extends React.Component {
     const after = [];
     for (const layer of layers)
       layer.apply(before, after);
-    return e("code", null, ["typedef ", root, " ", ...before.reverse(), name, ...after, ";"].join(""));
+    return e("code", null,
+      highlight("typedef", "hl-keyword"),
+      " ",
+      highlight(root, "hl-type"),
+      " ",
+      ...before.reverse(),
+      highlight(name, "hl-variable"),
+      ...after,
+      ";");
   }
 }
 

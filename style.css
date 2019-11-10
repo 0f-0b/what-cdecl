@@ -32,3 +32,15 @@ body {
 .removable::after {
   content: " ✕";
 }
+
+.hl-keyword, .hl-type {
+  color: #00f;
+}
+
+.hl-variable {
+  color: #001080;
+}
+
+.hl-number {
+  color: #09885a;
+}
