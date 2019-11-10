@@ -19,6 +19,12 @@ const primitives = [
   "long double"
 ];
 
+function addParentheses(before, after) {
+  if (before[before.length - 1] !== "*") return;
+  before.push("(");
+  after.push(")");
+}
+
 class PointerLayer {
   constructor() { }
 
@@ -26,8 +32,8 @@ class PointerLayer {
     return new PointerLayer;
   }
 
-  apply(s) {
-    return "*" + s;
+  apply(before) {
+    before.push("*");
   }
 }
 
@@ -40,9 +46,9 @@ class ArrayLayer {
     return new ArrayLayer(Math.trunc(Math.random() * 8) + 2);
   }
 
-  apply(s) {
-    if (s[0] == "*") s = `(${s})`;
-    return s + (this.length ? `[${this.length}]` : "[]");
+  apply(before, after) {
+    addParentheses(before, after);
+    after.push("[", this.length, "]");
   }
 }
 
@@ -55,9 +61,9 @@ class FunctionLayer {
     return new FunctionLayer(Array.from({ length: Math.trunc(Math.random() * 4) }, () => randomElement(primitives)));
   }
 
-  apply(s) {
-    if (s[0] == "*") s = `(${s})`;
-    return s + `(${this.args.join(", ")})`;
+  apply(before, after) {
+    addParentheses(before, after);
+    after.push("(", this.args.join(", "), ")");
   }
 }
 
@@ -81,10 +87,11 @@ class Cdecl extends React.Component {
 
   render() {
     const { name, root, layers } = this.props;
-    let str = name;
+    const before = [];
+    const after = [];
     for (const layer of layers)
-      str = layer.apply(str);
-    return e("code", null, `${root} ${str};`);
+      layer.apply(before, after);
+    return e("code", null, ["typedef ", root, " ", ...before.reverse(), name, ...after, ";"].join(""));
   }
 }
 
@@ -99,9 +106,10 @@ class LayersInput extends React.Component {
     for (const [type, , description] of available)
       descriptions.set(type, description);
     return e("div", null,
-      e("span", null,
-        e("var", null, name),
-        " is ",
+      e("span", { className: layers.length === expected.length && layers.every((layer, index) => layer === expected[index]) ? "correct" : null },
+        "instances of ",
+        e("var", null, e("code", null, name)),
+        " are ",
         layers.map((layer, index) => e("button", {
           key: index,
           class: "layer removable",
@@ -110,8 +118,8 @@ class LayersInput extends React.Component {
             return onUpdate(layers);
           }
         }, descriptions.get(layer))),
-        e("code", null, root)),
-      expected.every((layer, index) => layer === layers[index]) ? e("span", { className: "correct" }) : null,
+        e("code", null, root),
+        "s"),
       e("br"),
       e("span", null, available.map((layer, index) => e("button", {
         key: index,
@@ -131,30 +139,44 @@ class App extends React.Component {
   }
 
   render() {
-    const { difficulty, root, layers, inputLayers } = this.state;
+    const { difficulty, name, root, layers, inputLayers } = this.state;
+    const expected = layers.map(layer => layer.constructor);
     return e("center", null,
       e("h1", null, "What cdecl?"),
-      e(Cdecl, { name: "x", root, layers }),
+      e(Cdecl, { name, root, layers }),
       e(LayersInput, {
-        name: "x",
+        name,
         root,
         layers: inputLayers,
-        expected: layers.map(layer => layer.constructor),
+        expected,
         available: [
-          [PointerLayer, "pointer", "a pointer to"],
-          [ArrayLayer, "array", "an array of"],
-          [FunctionLayer, "function", "a function returning"]
+          [PointerLayer, "pointer", "pointers to"],
+          [ArrayLayer, "array", "arrays of"],
+          [FunctionLayer, "function", "functions returning"]
         ],
         onUpdate: layers => this.setState({ inputLayers: layers })
       }),
       "difficulty: ",
-      e("input", { type: "number", value: difficulty, min: 1, max: 100, onChange: event => this.setState(this.reset(event.target.valueAsNumber)) }),
-      e("button", { className: "another", onClick: () => this.setState(this.reset(difficulty)) }, "another one"));
+      e("input", {
+        type: "number",
+        value: difficulty,
+        min: 1,
+        max: 0x80000000,
+        step: 1,
+        onChange: event => {
+          const newDifficulty = event.target.valueAsNumber;
+          if (Number.isInteger(newDifficulty) && newDifficulty > 0 && newDifficulty <= 0x80000000)
+            this.setState(this.reset(newDifficulty));
+        }
+      }),
+      e("button", { className: "button", onClick: () => this.setState({ inputLayers: expected }) }, "show solution"),
+      e("button", { className: "button", onClick: () => this.setState(this.reset(difficulty)) }, "another one"));
   }
 
   reset(difficulty = 6) {
     return {
       difficulty,
+      name: "my_type",
       root: randomElement(primitives),
       layers: randomLayers(difficulty),
       inputLayers: []

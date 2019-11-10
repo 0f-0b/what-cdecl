@@ -3,6 +3,11 @@ body {
   font-family: sans-serif;
 }
 
+.button {
+  margin: 4px;
+  border-radius: 4px;
+}
+
 .layer {
   font-size: small;
   background-color: darkgray;
@@ -12,20 +17,18 @@ body {
   border-radius: 4px;
 }
 
-.removable::after {
-  content: " ✕";
+.correct {
+  color: green;
 }
 
 .correct::after {
   content: " ✓";
-  color: green;
 }
 
 .insertable::before {
   content: "+ ";
 }
 
-.another {
-  margin: 4px;
-  border-radius: 4px;
+.removable::after {
+  content: " ✕";
 }
