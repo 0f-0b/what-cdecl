@@ -1,5 +1,5 @@
 import { Primitive, primitives } from "./primitives";
-import { randomElement } from "./util";
+import { randomElement, randomInt } from "./util";
 
 export interface PointerLayer {
   type: "pointer";
@@ -46,15 +46,16 @@ export function randomLayer(type: LayerType): Layer {
     case "pointer":
       return { type };
     case "array":
-      return { type, length: Math.trunc(Math.random() * 8) + 2 };
+      return { type, length: 2 + randomInt(8) };
     case "function":
-      return { type, args: Array.from({ length: Math.trunc(Math.random() * 4) }, () => randomElement(primitives)) };
+      return { type, args: Array.from({ length: randomInt(4) }, () => randomElement(primitives)) };
   }
 }
 
 export function randomLayers(size: number): Layer[] {
   const result: Layer[] = [];
+  let last: LayerType = "pointer";
   for (let i = 0; i < size; i++)
-    result.push(randomLayer(randomElement(layerTypes[result[i - 1]?.type ?? "pointer"].next)));
+    result.push(randomLayer(last = randomElement(layerTypes[last].next)));
   return result;
 }
