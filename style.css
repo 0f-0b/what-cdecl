@@ -3,6 +3,10 @@ body {
   font-family: sans-serif;
 }
 
+.app {
+  text-align: center;
+}
+
 .button {
   margin: 4px;
   border-radius: 4px;

@@ -3,16 +3,15 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="content-security-policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
   <title>What cdecl?</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <main id="app"></main>
-  <script src="https://cdn.jsdelivr.net/npm/react@16.11.0/umd/react.production.min.js" crossorigin=""></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@16.11.0/umd/react-dom.production.min.js" crossorigin=""></script>
-  <script src="main.js"></script>
+  <main id="root" role="application"></main>
+  <script src="./main.js"></script>
 </body>
 
 </html>
