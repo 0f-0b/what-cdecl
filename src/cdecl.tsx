@@ -1,5 +1,6 @@
 import * as React from "react";
 import { PropsWithChildren, ReactNode } from "react";
+import { HlKeyword, HlNumeric, HlOperator, HlType, HlVariable } from "./highlight";
 import { Layer, LayerType } from "./layers";
 import { Primitive } from "./primitives";
 import { joinArray } from "./util";
@@ -9,15 +10,15 @@ function Parens({ children }: PropsWithChildren<unknown>): JSX.Element {
 }
 
 function PointerLayer({ children }: PropsWithChildren<unknown>): JSX.Element {
-  return <>*{children}</>;
+  return <><HlOperator>*</HlOperator>{children}</>;
 }
 
 function ArrayLayer({ children, length }: PropsWithChildren<{ length: number; }>): JSX.Element {
-  return <>{children}[<span className="hl-number">{length}</span>]</>;
+  return <>{children}[<HlNumeric>{length}</HlNumeric>]</>;
 }
 
 function FunctionLayer({ children, args }: PropsWithChildren<{ args: Primitive[]; }>): JSX.Element {
-  return <>{children}({joinArray(args.map((arg, index): ReactNode => <span key={index} className="hl-type">{arg}</span>), ", ")})</>;
+  return <>{children}({joinArray(args.map((arg, index): ReactNode => <HlType key={index}>{arg}</HlType>), ", ")})</>;
 }
 
 function renderLayer(last: ReactNode, layer: Layer, lastType?: LayerType): ReactNode {
@@ -41,8 +42,8 @@ export interface CdeclProps {
 }
 
 export function Cdecl({ name, root, layers }: CdeclProps): JSX.Element {
-  let result: ReactNode = <span className="hl-variable">{name}</span>;
+  let result: ReactNode = <HlVariable>{name}</HlVariable>;
   for (let i = 0, size = layers.length; i < size; i++)
     result = renderLayer(result, layers[i], layers[i - 1]?.type);
-  return <code><span className="hl-keyword">typedef</span> <span className="hl-type">{root}</span> {result};</code>;
+  return <code><HlKeyword>typedef</HlKeyword> <HlType>{root}</HlType> {result};</code>;
 }

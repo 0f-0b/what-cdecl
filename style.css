@@ -36,14 +36,22 @@ input, button {
   content: " ✕";
 }
 
-.hl-keyword, .hl-type {
+.hl-keyword {
+  color: #0000ff;
+}
+
+.hl-numeric {
+  color: #098658;
+}
+
+.hl-operator {
+  color: #000000;
+}
+
+.hl-type {
   color: #0000ff;
 }
 
 .hl-variable {
   color: #001080;
-}
-
-.hl-number {
-  color: #09885a;
 }
