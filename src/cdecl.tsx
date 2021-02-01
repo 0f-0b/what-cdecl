@@ -1,9 +1,8 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode } from "react";
+import { Fragment, PropsWithChildren, ReactNode } from "react";
 import { HlKeyword, HlNumeric, HlOperator, HlType, HlVariable } from "./highlight";
 import { Layer, LayerType } from "./layers";
 import { Primitive } from "./primitives";
-import { joinArray } from "./util";
 
 function Parens({ children }: PropsWithChildren<unknown>): JSX.Element {
   return <>({children})</>;
@@ -18,7 +17,9 @@ function ArrayLayer({ children, length }: PropsWithChildren<{ length: number; }>
 }
 
 function FunctionLayer({ children, args }: PropsWithChildren<{ args: Primitive[]; }>): JSX.Element {
-  return <>{children}({joinArray(args.map((arg, index): ReactNode => <HlType key={index}>{arg}</HlType>), ", ")})</>;
+  return <>{children}({args.map((arg, index): ReactNode => index
+    ? <Fragment key={index}>, <HlType>{arg}</HlType></Fragment>
+    : <HlType key={index}>{arg}</HlType>)})</>;
 }
 
 function renderLayer(last: ReactNode, layer: Layer, lastType?: LayerType): ReactNode {
