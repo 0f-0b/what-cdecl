@@ -1,24 +1,6 @@
-import { Primitive, primitives } from "./primitives";
+import { Layer, primitives } from "./c-ast";
 import { randomElement, randomInt } from "./util";
 
-export interface PointerLayer {
-  type: "pointer";
-}
-
-export interface ArrayLayer {
-  type: "array";
-  length: number;
-}
-
-export interface FunctionLayer {
-  type: "function";
-  args: Primitive[];
-}
-
-export type Layer =
-  | PointerLayer
-  | ArrayLayer
-  | FunctionLayer;
 export type LayerType = Layer["type"];
 
 export const layerTypes: {
@@ -46,9 +28,9 @@ export function randomLayer(type: LayerType): Layer {
     case "pointer":
       return { type };
     case "array":
-      return { type, length: 2 + randomInt(8) };
+      return { type, size: 2 + randomInt(8) };
     case "function":
-      return { type, args: Array.from({ length: randomInt(4) }, () => randomElement(primitives)) };
+      return { type, params: Array.from({ length: randomInt(4) }, () => ({ specifiers: [randomElement(primitives)], declarator: { type: [] } })) };
   }
 }
 
