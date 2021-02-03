@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Fragment, ReactNode } from "react";
-import { Primitive } from "./c-ast";
-import { HlType, HlVariable } from "./highlight";
+import { Fragment } from "react";
+import { TypeSpecifier } from "./c-ast";
+import { DeclarationSpecifierNode } from "./c-rst";
+import { HlVariable } from "./highlight";
 import { LayerType, layerTypes } from "./layers";
 import { arrayEqual } from "./util";
 
@@ -13,27 +14,24 @@ export interface InputLayer {
 }
 
 export function makeInputLayer(type: LayerType): InputLayer {
-  return {
-    id: nextId++,
-    type
-  };
+  return { id: nextId++, type };
 }
 
-export interface LayersInputProps {
+export interface TypeInputProps {
   name: string;
-  primitive: Primitive;
-  layers: InputLayer[];
+  primitive: TypeSpecifier[];
+  value: InputLayer[];
   expected: LayerType[];
-  onUpdate(layers: InputLayer[]): void;
+  onUpdate(type: InputLayer[]): void;
 }
 
-export function LayersInput({ name, primitive, layers, expected, onUpdate }: LayersInputProps): JSX.Element {
+export function TypeInput({ name, primitive, expected, value, onUpdate }: TypeInputProps): JSX.Element {
   return <>
-    <div className={arrayEqual(layers.map(layer => layer.type), expected) ? "correct" : undefined}>
-      instances of <code><HlVariable>{name}</HlVariable></code> are <span>{layers.map((layer, index): ReactNode => <Fragment key={layer.id}><button className="layer removable" onClick={() => onUpdate([...layers.slice(0, index), ...layers.slice(index + 1)])}>{layerTypes[layer.type].description}</button> </Fragment>)}</span><code><HlType>{primitive}</HlType></code>s
+    <div className={arrayEqual(value.map(layer => layer.type), expected) ? "correct" : undefined}>
+      Instances of <code><HlVariable>{name}</HlVariable></code> are <span>{value.map((layer, index) => <Fragment key={layer.id}><button className="layer removable" onClick={() => onUpdate([...value.slice(0, index), ...value.slice(index + 1)])}>{layerTypes[layer.type].description}</button> </Fragment>)}</span><code>{primitive.map((specifier, index) => <Fragment key={index}>{index ? " " : ""}<DeclarationSpecifierNode ast={specifier} /></Fragment>)}</code>s.
     </div>
     <div>
-      {(Object.keys(layerTypes) as LayerType[]).map((type): ReactNode => <Fragment key={type}><button className="layer insertable" onClick={() => onUpdate([...layers, makeInputLayer(type)])}>{type}</button> </Fragment>)}
+      {(Object.keys(layerTypes) as LayerType[]).map(type => <Fragment key={type}><button className="layer insertable" onClick={() => onUpdate([...value, makeInputLayer(type)])}>{type}</button> </Fragment>)}
     </div>
   </>;
 }

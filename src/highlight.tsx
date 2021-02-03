@@ -13,6 +13,10 @@ export function HlOperator({ children }: PropsWithChildren<unknown>): JSX.Elemen
   return <span className="hl-operator">{children}</span>;
 }
 
+export function HlBasicType({ children }: PropsWithChildren<unknown>): JSX.Element {
+  return <span className="hl-basic-type">{children}</span>;
+}
+
 export function HlType({ children }: PropsWithChildren<unknown>): JSX.Element {
   return <span className="hl-type">{children}</span>;
 }

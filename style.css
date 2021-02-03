@@ -48,8 +48,12 @@ input, button {
   color: #000000;
 }
 
-.hl-type {
+.hl-basic-type {
   color: #0000ff;
+}
+
+.hl-type {
+  color: #267f99;
 }
 
 .hl-variable {

@@ -1,22 +1,40 @@
-export const primitives = [
-  "char",
-  "signed char", "short int", "int", "long int",
-  "unsigned char", "unsigned short int", "unsigned int", "unsigned long int",
-  "float", "double", "long double"
+export const primitives: readonly (readonly TypeSpecifier[])[] = [
+  ["char"],
+  ["signed", "char"],
+  ["short", "int"],
+  ["int"],
+  ["long", "int"],
+  ["unsigned", "char"],
+  ["unsigned", "short", "int"],
+  ["unsigned", "int"],
+  ["unsigned", "long", "int"],
+  ["float"],
+  ["double"],
+  ["long", "double"]
 ] as const;
-export type Primitive = typeof primitives[number];
-export type Specifier =
-  | Primitive
+export const basicTypes = ["void", "char", "short", "int", "long", "float", "double", "signed", "unsigned"] as const;
+export type BasicType = typeof basicTypes[number];
+export const typedefs = [] as const;
+export type TypedefName = typeof typedefs[number];
+export type TypeSpecifier =
+  | BasicType
+  | TypedefName;
+export type DeclarationSpecifier =
+  | TypeSpecifier
   | "typedef";
 
 export interface Declaration {
-  specifiers: Specifier[];
-  declarators: Declarator[];
+  specifiers: DeclarationSpecifier[];
+  declarators: InitDeclarator[];
 }
 
 export interface Declarator {
   type: Layer[];
   name: string;
+}
+
+export interface InitDeclarator {
+  declarator: Declarator;
 }
 
 export interface AbstractDeclarator {
@@ -38,7 +56,7 @@ export interface FunctionLayer {
 }
 
 export interface ParameterDeclaration {
-  specifiers: Specifier[];
+  specifiers: DeclarationSpecifier[];
   declarator: Declarator | AbstractDeclarator;
 }
 

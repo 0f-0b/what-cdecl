@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Fragment, PropsWithChildren, ReactNode } from "react";
-import { AbstractDeclarator, Declaration, Declarator, ParameterDeclaration } from "./c-ast";
-import { HlKeyword, HlNumeric, HlOperator, HlVariable } from "./highlight";
+import { AbstractDeclarator, BasicType, basicTypes, Declaration, DeclarationSpecifier, Declarator, InitDeclarator, ParameterDeclaration, TypedefName, typedefs } from "./c-ast";
+import { HlBasicType, HlKeyword, HlNumeric, HlOperator, HlType, HlVariable } from "./highlight";
 
 function Parentheses({ children }: PropsWithChildren<unknown>): JSX.Element {
   return <>({children})</>;
@@ -16,13 +16,23 @@ function ArrayNode({ children, size }: PropsWithChildren<{ size: number; }>): JS
 }
 
 function FunctionNode({ children, params }: PropsWithChildren<{ params: ParameterDeclaration[]; }>): JSX.Element {
-  return <>{children}({params.map((param, index): ReactNode => index
-    ? <Fragment key={index}>, <ParameterDeclarationNode ast={param} /></Fragment>
-    : <ParameterDeclarationNode key={index} ast={param} />)})</>;
+  return <>{children}({params.map((param, index) => <Fragment key={index}>{index ? ", " : ""}<ParameterDeclarationNode ast={param} /></Fragment>)})</>;
 }
 
 function ParameterDeclarationNode({ ast }: { ast: ParameterDeclaration; }): JSX.Element {
-  return <>{ast.specifiers.map((specifier, index) => <Fragment key={index}><HlKeyword>{specifier}</HlKeyword>{ast.declarator.type.length || "name" in ast.declarator ? " " : ""}</Fragment>)}{<DeclaratorNode ast={ast.declarator} />}</>;
+  return <>{ast.specifiers.map((specifier, index, arr) => <Fragment key={index}><DeclarationSpecifierNode ast={specifier} />{index !== arr.length - 1 || ast.declarator.type.length || "name" in ast.declarator ? " " : ""}</Fragment>)}{<DeclaratorNode ast={ast.declarator} />}</>;
+}
+
+export function DeclarationNode({ ast }: { ast: Declaration; }): JSX.Element {
+  return <>{ast.specifiers.map((specifier, index, arr) => <Fragment key={index}><DeclarationSpecifierNode ast={specifier} />{index !== arr.length - 1 || ast.declarators.length ? " " : ""}</Fragment>)}{ast.declarators.map((declarator, index): ReactNode => index ? <Fragment key={index}>, <InitDeclaratorNode ast={declarator} /></Fragment> : <InitDeclaratorNode key={index} ast={declarator} />)};</>;
+}
+
+export function DeclarationSpecifierNode({ ast }: { ast: DeclarationSpecifier; }): JSX.Element {
+  if (basicTypes.includes(ast as BasicType))
+    return <HlBasicType>{ast}</HlBasicType>;
+  if (typedefs.includes(ast as TypedefName))
+    return <HlType>{ast}</HlType>;
+  return <HlKeyword>{ast}</HlKeyword>;
 }
 
 export function DeclaratorNode({ ast }: { ast: Declarator | AbstractDeclarator; }): JSX.Element {
@@ -51,6 +61,6 @@ export function DeclaratorNode({ ast }: { ast: Declarator | AbstractDeclarator; 
   return <>{result}</>;
 }
 
-export function DeclarationNode({ ast }: { ast: Declaration; }): JSX.Element {
-  return <>{ast.specifiers.map((specifier, index) => <Fragment key={index}><HlKeyword>{specifier}</HlKeyword> </Fragment>)}{ast.declarators.map((declarator, index): ReactNode => index ? <Fragment key={index}>, <DeclaratorNode ast={declarator} /></Fragment> : <DeclaratorNode key={index} ast={declarator} />)};</>;
+export function InitDeclaratorNode({ ast }: { ast: InitDeclarator; }): JSX.Element {
+  return <DeclaratorNode ast={ast.declarator} />;
 }

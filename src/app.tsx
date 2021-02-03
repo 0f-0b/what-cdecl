@@ -1,49 +1,50 @@
 import * as React from "react";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import * as ReactDOM from "react-dom";
-import { Layer, Primitive, primitives } from "./c-ast";
+import { Layer, primitives, TypeSpecifier } from "./c-ast";
 import { DeclarationNode } from "./c-rst";
 import { IntegerInput } from "./integer-input";
 import { randomLayers } from "./layers";
-import { InputLayer, LayersInput, makeInputLayer } from "./layers-input";
+import { InputLayer, makeInputLayer, TypeInput } from "./layers-input";
 import { randomElement } from "./util";
 
-export interface CdeclProps {
-  primitive: Primitive;
-  type: Layer[];
-  name: string;
+function useProvider<T>(provider: () => T): [T, () => void] {
+  return useReducer(provider, undefined, provider);
 }
 
-export function Cdecl({ primitive, type, name }: CdeclProps): JSX.Element {
-  return <code><DeclarationNode ast={{ specifiers: ["typedef", primitive], declarators: [{ type, name }] }} /></code>;
+export interface CdeclProps {
+  primitive: TypeSpecifier[];
+  type: Layer[];
+  name: string;
 }
 
 function App(): JSX.Element {
   const name = "my_type";
   const [difficulty, setDifficulty] = useState(6);
-  const [primitive, setPrimitive] = useState(randomElement(primitives));
-  const [layers, setLayers] = useState(randomLayers(difficulty));
-  const [inputLayers, setInputLayers] = useState<InputLayer[]>([]);
-  const expected = layers.map(layer => layer.type);
+  const [primitive, resetPrimitive] = useProvider(() => [...randomElement(primitives)]);
+  const [type, resetType] = useProvider(() => randomLayers(difficulty));
+  const [input, setInput] = useState<InputLayer[]>([]);
+  const expected = type.map(layer => layer.type);
+
+  function reset() {
+    resetPrimitive();
+    resetType();
+    setInput([]);
+  }
+
   return <div className="app">
     <h1>What cdecl?</h1>
     <div>
-      <Cdecl primitive={primitive} type={layers} name={name} />
+      <code><DeclarationNode ast={{ specifiers: ["typedef", ...primitive], declarators: [{ declarator: { type: type, name } }] }} /></code>
     </div>
-    <LayersInput name={name} primitive={primitive} layers={inputLayers} expected={expected} onUpdate={setInputLayers} />
+    <TypeInput name={name} primitive={primitive} value={input} expected={expected} onUpdate={setInput} />
     <div>
       <label>difficulty: <IntegerInput value={difficulty} min={1} max={1000} onChange={value => {
         setDifficulty(value);
-        setPrimitive(randomElement(primitives));
-        setLayers(randomLayers(value));
-        setInputLayers([]);
+        reset();
       }} /></label>{" "}
-      <button onClick={() => setInputLayers(expected.map(makeInputLayer))}>show solution</button>{" "}
-      <button onClick={() => {
-        setPrimitive(randomElement(primitives));
-        setLayers(randomLayers(difficulty));
-        setInputLayers([]);
-      }}>another one</button>
+      <button onClick={() => setInput(expected.map(makeInputLayer))}>show solution</button>{" "}
+      <button onClick={reset}>another one</button>
     </div>
   </div>;
 }

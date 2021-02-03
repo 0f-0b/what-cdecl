@@ -30,7 +30,7 @@ export function randomLayer(type: LayerType): Layer {
     case "array":
       return { type, size: 2 + randomInt(8) };
     case "function":
-      return { type, params: Array.from({ length: randomInt(4) }, () => ({ specifiers: [randomElement(primitives)], declarator: { type: [] } })) };
+      return { type, params: Array.from({ length: randomInt(4) }, () => ({ specifiers: [...randomElement(primitives)], declarator: { type: [] } })) };
   }
 }
 
