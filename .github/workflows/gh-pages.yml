@@ -1,25 +1,18 @@
 name: GitHub Pages
 on:
   push:
-    branches: [master]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: denoland/setup-deno@v1
         with:
-          node-version: "14"
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: npm ci
-      - run: npm run build:prod
+          deno-version: "1"
+      - run: ./scripts/build.tsx
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: "build"
+          publish_dir: "dist"
           force_orphan: true
