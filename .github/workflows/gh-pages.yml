@@ -1,18 +1,33 @@
-name: GitHub Pages
+name: Build and Deploy Pages
 on:
   push:
     branches: [main]
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: denoland/setup-deno@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Deno
+        uses: denoland/setup-deno@v1
         with:
-          deno-version: "1"
-      - run: ./scripts/build.tsx
-      - uses: peaceiris/actions-gh-pages@v3
+          deno-version: 1
+      - name: Build
+        run: ./scripts/build.tsx
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: "dist"
-          force_orphan: true
+          path: "./dist"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
