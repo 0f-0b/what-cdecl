@@ -1,11 +1,5 @@
 {
   "compilerOptions": {
-    "lib": [
-      "deno.ns",
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable"
-    ],
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true
   },
@@ -22,5 +16,8 @@
         "dist"
       ]
     }
+  },
+  "tasks": {
+    "lint": "deno fmt --check && deno lint && deno check --remote --lock -- static/main.tsx scripts/build.tsx"
   }
 }

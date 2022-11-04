@@ -1,13 +1,15 @@
 import React from "../deps/react.ts";
-import type {
-  AbstractDeclarator,
-  Declaration,
-  DeclarationSpecifier,
-  Declarator,
-  InitDeclarator,
-  ParameterDeclaration,
+
+import {
+  type AbstractDeclarator,
+  basicTypes,
+  type Declaration,
+  type DeclarationSpecifier,
+  type Declarator,
+  type InitDeclarator,
+  type ParameterDeclaration,
+  typedefs,
 } from "../c_ast.ts";
-import { basicTypes, typedefs } from "../c_ast.ts";
 import {
   HlBasicType,
   HlKeyword,

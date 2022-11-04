@@ -1,5 +1,5 @@
 import { DenoDir, FileFetcher } from "../deps/deno_cache.ts";
-import { instantiate, MediaType, parseModule } from "../deps/deno_graph.ts";
+import { init, MediaType, parseModule } from "../deps/deno_graph.ts";
 import type { Loader, Plugin } from "../deps/esbuild.ts";
 import { AsyncMutex } from "../deps/esfx/async_mutex.ts";
 
@@ -58,7 +58,7 @@ export const httpImports: Plugin = (() => {
           if (res?.kind !== "module") {
             return null;
           }
-          await instantiate();
+          await init();
           const mod = parseModule(res.specifier, res.content, {
             headers: res.headers,
           });

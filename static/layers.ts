@@ -1,5 +1,5 @@
-import { Layer, primitives } from "./c_ast.ts";
 import { sample } from "./collections/sample.ts";
+import { Layer, primitives } from "./c_ast.ts";
 import { randomInt } from "./random.ts";
 
 export type LayerType = Layer["type"];
