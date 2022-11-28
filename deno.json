@@ -18,6 +18,6 @@
     }
   },
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --remote --lock -- static/main.tsx scripts/build.tsx"
+    "lint": "deno fmt --check && deno lint && deno check static/main.tsx && deno check scripts/build.tsx"
   }
 }
