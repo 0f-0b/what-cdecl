@@ -1,4 +1,4 @@
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 
 export interface IntegerInputProps
   extends Omit<React.ComponentPropsWithoutRef<"input">, "onChange"> {

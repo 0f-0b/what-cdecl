@@ -1,11 +1,12 @@
 #!/usr/bin/env -S deno run --lock -A
 
 import { build, initialize, stop } from "../deps/esbuild.ts";
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path.ts";
-import { httpImports } from "../plugin/http_imports.ts";
+
+import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
 async function bundle(
   outDir: string,
@@ -19,11 +20,12 @@ async function bundle(
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [httpImports],
+      plugins: [denoCachePlugin()],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",
       target: "es2020",
+      supported: { "nesting": false },
       minify: true,
       charset: "utf8",
     });

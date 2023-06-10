@@ -1,5 +1,6 @@
-import { sample } from "./collections/sample.ts";
+import { makeArray } from "./array.ts";
 import { Layer, primitives } from "./c_ast.ts";
+import { sample } from "./collections/sample.ts";
 import { randomInt } from "./random.ts";
 
 export type LayerType = Layer["type"];
@@ -32,8 +33,8 @@ export function randomLayer(type: LayerType): Layer {
     case "function":
       return {
         type: "function",
-        params: Array.from({ length: randomInt(4) }, () => ({
-          specifiers: Array.from(sample(primitives)!),
+        params: makeArray(randomInt(4), () => ({
+          specifiers: sample(primitives)!.slice(),
           declarator: { type: [] },
         })),
       };

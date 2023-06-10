@@ -3,20 +3,10 @@
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true
   },
-  "fmt": {
-    "files": {
-      "exclude": [
-        "dist"
-      ]
-    }
-  },
-  "lint": {
-    "files": {
-      "exclude": [
-        "dist"
-      ]
-    }
-  },
+  "importMap": "import_map.json",
+  "exclude": [
+    "dist"
+  ],
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check static/main.tsx && deno check scripts/build.tsx"
   }

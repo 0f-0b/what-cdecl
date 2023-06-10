@@ -1,4 +1,4 @@
-import React from "../deps/react.ts";
+import { React } from "../deps/react.ts";
 
 import { TypeSpecifier } from "../c_ast.ts";
 import { LayerType, layerTypes } from "../layers.ts";

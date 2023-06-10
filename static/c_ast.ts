@@ -1,37 +1,36 @@
-export const primitives: readonly (readonly TypeSpecifier[])[] = Object.freeze(
-  [
-    ["char"],
-    ["signed", "char"],
-    ["short", "int"],
-    ["int"],
-    ["long", "int"],
-    ["unsigned", "char"],
-    ["unsigned", "short", "int"],
-    ["unsigned", "int"],
-    ["unsigned", "long", "int"],
-    ["float"],
-    ["double"],
-    ["long", "double"],
-  ] as const,
-);
+export const primitives = [
+  ["char"],
+  ["signed", "char"],
+  ["short", "int"],
+  ["int"],
+  ["long", "int"],
+  ["unsigned", "char"],
+  ["unsigned", "short", "int"],
+  ["unsigned", "int"],
+  ["unsigned", "long", "int"],
+  ["float"],
+  ["double"],
+  ["long", "double"],
+] as const;
+export const basicTypes = [
+  "void",
+  "char",
+  "short",
+  "int",
+  "long",
+  "float",
+  "double",
+  "signed",
+  "unsigned",
+] as const;
+export const typedefs = [] as const;
 for (const primitive of primitives) {
   Object.freeze(primitive);
 }
-export const basicTypes = Object.freeze(
-  [
-    "void",
-    "char",
-    "short",
-    "int",
-    "long",
-    "float",
-    "double",
-    "signed",
-    "unsigned",
-  ] as const,
-);
+Object.freeze(primitives);
+Object.freeze(basicTypes);
+Object.freeze(typedefs);
 export type BasicType = typeof basicTypes[number];
-export const typedefs = [] as const;
 export type TypedefName = typeof typedefs[number];
 export type TypeSpecifier = BasicType | TypedefName;
 export type DeclarationSpecifier = TypeSpecifier | "typedef";

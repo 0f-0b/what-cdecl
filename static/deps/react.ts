@@ -1,5 +1,5 @@
 export {
-  default,
+  default as React,
   useCallback,
   useContext,
   useDebugValue,
@@ -15,4 +15,4 @@ export {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "https://esm.sh/react@18.2.0?target=es2020&pin=v99";
+} from "https://esm.sh/v125/react@18.2.0?target=es2020";

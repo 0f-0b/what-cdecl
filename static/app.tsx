@@ -1,5 +1,6 @@
-import React, { useState } from "./deps/react.ts";
+import { React, useState } from "./deps/react.ts";
 
+import { primitives } from "./c_ast.ts";
 import { sample } from "./collections/sample.ts";
 import { DeclarationNode } from "./components/c_ast_nodes.tsx";
 import { IntegerInput } from "./components/integer_input.tsx";
@@ -8,7 +9,6 @@ import {
   makeInputLayer,
   TypeInput,
 } from "./components/layers_input.tsx";
-import { primitives } from "./c_ast.ts";
 import { randomLayers } from "./layers.ts";
 import { useProvider } from "./use_provider.ts";
 
