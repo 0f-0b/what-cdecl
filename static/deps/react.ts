@@ -1,3 +1,4 @@
+// @deno-types="npm:@types/react@18.2.7"
 export {
   default as React,
   useCallback,
@@ -15,4 +16,4 @@ export {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "https://esm.sh/v125/react@18.2.0?target=es2020";
+} from "npm:react@18.2.0";

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true
+  },
+  "nodeModulesDir": true
+}
