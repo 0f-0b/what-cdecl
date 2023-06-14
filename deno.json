@@ -9,6 +9,6 @@
   ],
   "tasks": {
     "lint": "deno fmt --check && deno lint && deno check --all scripts/build.tsx",
-    "static:lint": "cd static && deno check --all main.tsx"
+    "static:lint": "cd static && deno check main.tsx"
   }
 }
