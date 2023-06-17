@@ -1,8 +1,9 @@
 #!/usr/bin/env -S deno run --lock -A
 
+/* @jsx h */
 import { build, initialize, stop } from "../deps/esbuild.ts";
-import { React } from "../deps/react.ts";
-import { renderToStaticMarkup } from "../deps/react_dom/server.ts";
+import { toHtml } from "../deps/hast_util_to_html.ts";
+import { h } from "../deps/hastscript.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path.ts";
 
@@ -52,10 +53,10 @@ const [js, css] = await (async () => {
   }
 })();
 stop();
-const html = renderToStaticMarkup(
+const html = toHtml(
   <html lang="en">
     <head>
-      <meta charSet="utf-8" />
+      <meta charset="utf-8" />
       <meta
         name="viewport"
         content="width=device-width,initial-scale=1,shrink-to-fit=no"
@@ -66,8 +67,14 @@ const html = renderToStaticMarkup(
       <script src={js} type="module" />
     </head>
     <body>
-      <main id="root" role="application" />
+      <div id="root" />
     </body>
   </html>,
+  {
+    omitOptionalTags: true,
+    preferUnquoted: true,
+    quoteSmart: true,
+    tightCommaSeparatedLists: true,
+  },
 );
 await Deno.writeTextFile("dist/index.html", `<!DOCTYPE html>${html}\n`);
