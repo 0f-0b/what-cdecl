@@ -1,11 +1,11 @@
-#!/usr/bin/env -S deno run --lock -A
+#!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
 
 /* @jsx h */
-import { build, initialize, stop } from "../deps/esbuild.ts";
+import { build, stop } from "../deps/esbuild.ts";
 import { toHtml } from "../deps/hast_util_to_html.ts";
 import { h } from "../deps/hastscript.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
-import { relative } from "../deps/std/path.ts";
+import { relative } from "../deps/std/path/relative.ts";
 
 import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
 
@@ -19,7 +19,6 @@ for (const arg of Deno.args) {
   Deno.exit(2);
 }
 Deno.chdir(new URL("..", import.meta.url));
-await initialize({});
 await emptyDir("dist");
 const [js, css] = await (async () => {
   const outDir = "dist";
@@ -49,10 +48,11 @@ const [js, css] = await (async () => {
     }
     return inputs.map((path) => outputs.get(path)!);
   } catch {
-    Deno.exit(1);
+    throw "Build failed";
+  } finally {
+    stop();
   }
 })();
-stop();
 const html = toHtml(
   <html lang="en">
     <head>

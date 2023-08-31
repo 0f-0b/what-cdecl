@@ -1,4 +1,4 @@
-// @deno-types="npm:@types/react@18.2.7"
+// @deno-types="npm:@types/react@^18"
 export {
   default as React,
   useCallback,
