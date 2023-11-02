@@ -1,34 +1,33 @@
 {
-  "version": "2",
-  "remote": {},
-  "npm": {
+  "version": "3",
+  "packages": {
     "specifiers": {
-      "@types/react-dom@^18": "@types/react-dom@18.2.7",
-      "@types/react@^18": "@types/react@18.2.21",
-      "react-dom@18.2.0": "react-dom@18.2.0_react@18.2.0",
-      "react@18.2.0": "react@18.2.0"
+      "npm:@types/react-dom@^18": "npm:@types/react-dom@18.2.14",
+      "npm:@types/react@^18": "npm:@types/react@18.2.34",
+      "npm:react-dom@18.2.0": "npm:react-dom@18.2.0_react@18.2.0",
+      "npm:react@18.2.0": "npm:react@18.2.0"
     },
-    "packages": {
-      "@types/prop-types@15.7.5": {
-        "integrity": "sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==",
+    "npm": {
+      "@types/prop-types@15.7.9": {
+        "integrity": "sha512-n1yyPsugYNSmHgxDFjicaI2+gCNjsBck8UX9kuofAKlc0h1bL+20oSF72KeNaW2DUlesbEVCFgyV2dPGTiY42g==",
         "dependencies": {}
       },
-      "@types/react-dom@18.2.7": {
-        "integrity": "sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==",
+      "@types/react-dom@18.2.14": {
+        "integrity": "sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==",
         "dependencies": {
-          "@types/react": "@types/react@18.2.21"
+          "@types/react": "@types/react@18.2.34"
         }
       },
-      "@types/react@18.2.21": {
-        "integrity": "sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==",
+      "@types/react@18.2.34": {
+        "integrity": "sha512-U6eW/alrRk37FU/MS2RYMjx0Va2JGIVXELTODaTIYgvWGCV4Y4TfTUzG8DdmpDNIT0Xpj/R7GfyHOJJrDttcvg==",
         "dependencies": {
-          "@types/prop-types": "@types/prop-types@15.7.5",
-          "@types/scheduler": "@types/scheduler@0.16.3",
+          "@types/prop-types": "@types/prop-types@15.7.9",
+          "@types/scheduler": "@types/scheduler@0.16.5",
           "csstype": "csstype@3.1.2"
         }
       },
-      "@types/scheduler@0.16.3": {
-        "integrity": "sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==",
+      "@types/scheduler@0.16.5": {
+        "integrity": "sha512-s/FPdYRmZR8SjLWGMCuax7r3qCWQw9QKHzXVukAuuIJkXkDRwp+Pu5LMIVFi0Fxbav35WURicYr8u1QsoybnQw==",
         "dependencies": {}
       },
       "csstype@3.1.2": {
@@ -66,5 +65,6 @@
         }
       }
     }
-  }
+  },
+  "remote": {}
 }
