@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.205.0/path/relative.ts";
+export * from "jsr:@std/path@^0.214.0/relative";

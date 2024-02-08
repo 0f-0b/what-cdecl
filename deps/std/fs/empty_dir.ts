@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.205.0/fs/empty_dir.ts";
+export * from "jsr:@std/fs@^0.214.0/empty_dir";

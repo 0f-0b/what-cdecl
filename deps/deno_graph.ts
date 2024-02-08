@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/deno_graph@0.53.0/mod.ts";
+export * from "https://deno.land/x/deno_graph@0.64.1/mod.ts";

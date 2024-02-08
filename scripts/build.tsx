@@ -3,7 +3,7 @@
 /* @jsxImportSource hastscript */
 import "hastscript/jsx-runtime";
 
-import { build, stop } from "../deps/esbuild.ts";
+import { build } from "../deps/esbuild.ts";
 import { toHtml } from "../deps/hast_util_to_html.ts";
 import { emptyDir } from "../deps/std/fs/empty_dir.ts";
 import { relative } from "../deps/std/path/relative.ts";
@@ -50,8 +50,6 @@ const [js, css] = await (async () => {
     return inputs.map((path) => outputs.get(path)!);
   } catch {
     throw "Build failed";
-  } finally {
-    stop();
   }
 })();
 const html = toHtml(
