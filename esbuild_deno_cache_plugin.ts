@@ -1,10 +1,10 @@
-import { type CacheSetting, createCache } from "./deps/deno_cache.ts";
+import { type CacheSetting, createCache } from "./deps/deno/cache_dir.ts";
 import {
   createGraph,
   init,
   type LoadResponse,
   parseModule,
-} from "./deps/deno_graph.ts";
+} from "./deps/deno/graph.ts";
 import type { Loader, Plugin } from "./deps/esbuild.ts";
 import { parseFromJson } from "./deps/import_map.ts";
 import { fromFileUrl } from "./deps/std/path/from_file_url.ts";

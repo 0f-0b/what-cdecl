@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Deno
         uses: denoland/setup-deno@v1
         with:
@@ -25,9 +25,9 @@ jobs:
       - name: Build
         run: ./scripts/build.tsx
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: "./dist"
+          path: dist
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -37,4 +37,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

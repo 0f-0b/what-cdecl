@@ -1,1 +1,1 @@
-export * from "jsr:@std/path@^0.214.0/resolve";
+export * from "jsr:@std/path@^0.220.1/resolve";
