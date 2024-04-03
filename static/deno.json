@@ -1,4 +1,8 @@
 {
+  "imports": {
+    "react": "./deps/react.ts",
+    "react-dom/client": "./deps/react_dom/client.ts"
+  },
   "compilerOptions": {
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true

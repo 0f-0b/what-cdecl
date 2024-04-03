@@ -1,5 +1,5 @@
 import { makeArray } from "./array.ts";
-import { Layer, primitives } from "./c_ast.ts";
+import { type Layer, primitives } from "./c_ast.ts";
 import { sample } from "./collections/sample.ts";
 import { randomInt } from "./random.ts";
 

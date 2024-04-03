@@ -1,3 +1,4 @@
 .DS_Store
+generated_import_map.json
 node_modules/
 /dist/

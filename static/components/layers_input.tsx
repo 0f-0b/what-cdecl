@@ -1,7 +1,7 @@
-import { React } from "../deps/react.ts";
+import { React } from "react";
 
-import { TypeSpecifier } from "../c_ast.ts";
-import { LayerType, layerTypes } from "../layers.ts";
+import type { TypeSpecifier } from "../c_ast.ts";
+import { type LayerType, layerTypes } from "../layers.ts";
 import { DeclarationSpecifierNode } from "./c_ast_nodes.tsx";
 import { HlVariable } from "./highlight.tsx";
 

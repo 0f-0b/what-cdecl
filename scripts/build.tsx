@@ -1,14 +1,16 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
 
 /* @jsxImportSource hastscript */
-import "hastscript/jsx-runtime";
 
-import { build, stop } from "../deps/esbuild.ts";
-import { toHtml } from "../deps/hast_util_to_html.ts";
-import { emptyDir } from "../deps/std/fs/empty_dir.ts";
-import { relative } from "../deps/std/path/relative.ts";
+import { emptyDir } from "@std/fs/empty-dir";
+import { relative } from "@std/path/relative";
+import { resolve } from "@std/path/resolve";
+import { toFileUrl } from "@std/path/to-file-url";
+import { build, stop } from "esbuild";
+import { toHtml } from "hast-util-to-html";
 
-import { denoCachePlugin } from "../esbuild_deno_cache_plugin.ts";
+import { denoCachePlugin } from "./esbuild_deno_cache_plugin.ts";
+import { expandImportMap } from "./expand_import_map.ts";
 
 let dev = false;
 for (const arg of Deno.args) {
@@ -20,6 +22,17 @@ for (const arg of Deno.args) {
   Deno.exit(2);
 }
 Deno.chdir(new URL("..", import.meta.url));
+
+async function generateImportMap(
+  configPath: string,
+  importMapPath: string,
+): Promise<undefined> {
+  const config = JSON.parse(await Deno.readTextFile(configPath));
+  const importMap = expandImportMap(config);
+  await Deno.writeTextFile(importMapPath, JSON.stringify(importMap));
+}
+
+await generateImportMap("static/deno.json", "static/generated_import_map.json");
 await emptyDir("dist");
 const [js, css] = await (async () => {
   const outDir = "dist";
@@ -32,7 +45,9 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin()],
+      plugins: [denoCachePlugin({
+        importMapURL: toFileUrl(resolve("static/generated_import_map.json")),
+      })],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",

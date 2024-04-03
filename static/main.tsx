@@ -2,8 +2,9 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 /// <reference lib="es2020" />
-import { React } from "./deps/react.ts";
-import { createRoot } from "./deps/react_dom/client.ts";
+
+import { React } from "react";
+import { createRoot } from "react-dom/client";
 
 import { App } from "./app.tsx";
 

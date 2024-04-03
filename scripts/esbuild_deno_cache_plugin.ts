@@ -1,15 +1,11 @@
-import { type CacheSetting, createCache } from "./deps/deno/cache_dir.ts";
-import {
-  createGraph,
-  init,
-  type LoadResponse,
-  parseModule,
-} from "./deps/deno/graph.ts";
-import type { Loader, Plugin } from "./deps/esbuild.ts";
-import { parseFromJson } from "./deps/import_map.ts";
-import { fromFileUrl } from "./deps/std/path/from_file_url.ts";
-import { resolve } from "./deps/std/path/resolve.ts";
-import { toFileUrl } from "./deps/std/path/to_file_url.ts";
+import { type CacheSetting, createCache } from "@deno/cache-dir";
+import { createGraph, init, type LoadResponse, parseModule } from "@deno/graph";
+import { parseFromJson } from "@deno/import-map";
+import { SEPARATOR } from "@std/path/constants";
+import { fromFileUrl } from "@std/path/from-file-url";
+import { resolve } from "@std/path/resolve";
+import { toFileUrl } from "@std/path/to-file-url";
+import type { Loader, Plugin } from "esbuild";
 
 const decoder = new TextDecoder();
 const loaders = new Map<string, Loader>([
@@ -29,6 +25,14 @@ const loaders = new Map<string, Loader>([
 
 function asPath(pathOrURL: string | URL): string {
   return typeof pathOrURL === "string" ? pathOrURL : fromFileUrl(pathOrURL);
+}
+
+function optionAsPath(pathOrURL: string | URL | undefined): string | undefined {
+  return pathOrURL === undefined ? undefined : asPath(pathOrURL);
+}
+
+function optionAsURL(url: string | URL | undefined): string | undefined {
+  return url === undefined ? undefined : new URL(url).href;
 }
 
 interface NpmSpecifier {
@@ -60,16 +64,10 @@ export interface DenoCachePluginOptions {
 export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
   const allowRemote = options?.allowRemote;
   const cacheSetting = options?.cacheSetting;
-  const denoDir = options?.denoDir;
-  const vendorDir = options?.vendorDir;
-  const importMapURL = (() => {
-    const url = options?.importMapURL;
-    return url === undefined ? undefined : new URL(url).href;
-  })();
-  const nodeResolutionRootDir = (() => {
-    const pathOrURL = options?.nodeResolutionRootDir;
-    return pathOrURL === undefined ? undefined : asPath(pathOrURL);
-  })();
+  const denoDir = optionAsPath(options?.denoDir);
+  const vendorDir = optionAsPath(options?.vendorDir);
+  const importMapURL = optionAsURL(options?.importMapURL);
+  const nodeResolutionRootDir = optionAsPath(options?.nodeResolutionRootDir);
   return {
     name: "deno-cache",
     setup(build) {
@@ -81,19 +79,12 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
       // deno-lint-ignore ban-types
       const redirects: Record<string, string> = { __proto__: null } as {};
       build.onStart(async () => {
-        const { load: innerLoad } = createCache({
+        ({ load } = createCache({
           allowRemote,
           cacheSetting,
           root: denoDir,
           vendorRoot: vendorDir,
-        });
-        load = async (specifier) => {
-          const res = await innerLoad(specifier);
-          if (res?.kind === "module" && Array.isArray(res.content)) {
-            res.content = new Uint8Array(res.content);
-          }
-          return res;
-        };
+        }));
         if (importMapURL !== undefined) {
           const res = await load(importMapURL);
           if (res?.kind !== "module") {
@@ -109,11 +100,17 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
       build.onResolve(
         { filter: /(?:)/ },
         async ({ path, importer, namespace, resolveDir, kind }) => {
+          if (resolveDir.split(SEPARATOR).includes("node_modules")) {
+            return null;
+          }
           if (kind === "entry-point" && namespace === "file") {
             const root = toFileUrl(resolve(resolveDir, path)).href;
             const graph = await createGraph(root, {
               kind: "codeOnly",
-              load,
+              load: async (specifier) => {
+                const res = await load(specifier);
+                return res && { ...res };
+              },
               resolve: resolveImport,
             });
             Object.assign(redirects, graph.redirects);
@@ -124,19 +121,10 @@ export function denoCachePlugin(options?: DenoCachePluginOptions): Plugin {
           ) {
             return null;
           }
-          const resolved = (() => {
-            const referrer = namespace === "file"
-              ? toFileUrl(importer).href
-              : importer;
-            try {
-              return resolveImport(path, referrer);
-            } catch {
-              return null;
-            }
-          })();
-          if (resolved === null) {
-            return null;
-          }
+          const referrer = namespace === "file"
+            ? toFileUrl(importer).href
+            : importer;
+          const resolved = resolveImport(path, referrer);
           const actual = new URL(redirects[resolved] ?? resolved);
           switch (actual.protocol) {
             case "http:":
