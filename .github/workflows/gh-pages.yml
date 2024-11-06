@@ -7,7 +7,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 jobs:
   build:
@@ -16,12 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: 1
+        uses: denoland/setup-deno@v2
       - name: Cache dependencies
         working-directory: static
-        run: deno cache main.tsx
+        run: deno task cache
       - name: Build
         run: ./scripts/build.tsx
       - name: Upload artifact

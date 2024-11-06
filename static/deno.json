@@ -1,11 +1,22 @@
 {
   "imports": {
     "react": "./deps/react.ts",
+    "react/jsx-runtime": "./deps/react/jsx_runtime.ts",
     "react-dom/client": "./deps/react_dom/client.ts"
   },
   "compilerOptions": {
-    "noImplicitOverride": true,
-    "useUnknownInCatchVariables": true
+    "exactOptionalPropertyTypes": true
   },
-  "nodeModulesDir": true
+  "nodeModulesDir": "auto",
+  "lint": {
+    "rules": {
+      "include": [
+        "verbatim-module-syntax"
+      ]
+    }
+  },
+  "tasks": {
+    "cache": "rm -rf node_modules && deno cache main.tsx",
+    "lint": "deno fmt --check && deno lint && deno check --all main.tsx"
+  }
 }

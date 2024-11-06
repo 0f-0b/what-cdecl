@@ -1,5 +1,6 @@
-// deno-lint-ignore verbatim-module-syntax
-import { React, useState } from "react";
+/* @jsxImportSource react */
+
+import { type React, useState } from "react";
 
 import { primitives } from "./c_ast.ts";
 import { sample } from "./collections/sample.ts";
@@ -9,7 +10,7 @@ import {
   type InputLayer,
   makeInputLayer,
   TypeInput,
-} from "./components/layers_input.tsx";
+} from "./components/type_input.tsx";
 import { randomLayers } from "./layers.ts";
 import { useProvider } from "./use_provider.ts";
 
@@ -49,7 +50,7 @@ export const App: React.FC = () => {
       />
       <div>
         <label>
-          difficulty:{" "}
+          {"difficulty: "}
           <IntegerInput
             value={difficulty}
             min={1}

@@ -1,5 +1,6 @@
-// deno-lint-ignore verbatim-module-syntax
-import { React } from "react";
+/* @jsxImportSource react */
+
+import { type React, useEffect, useRef } from "react";
 
 export interface IntegerInputProps
   extends Omit<React.ComponentPropsWithoutRef<"input">, "onChange"> {
@@ -15,18 +16,30 @@ export const IntegerInput: React.FC<IntegerInputProps> = ({
   max = Infinity,
   onChange,
   ...props
-}) => (
-  <input
-    type="number"
-    value={value}
-    min={min}
-    max={max}
-    onChange={(event) => {
-      const value = event.target.valueAsNumber;
-      if (Number.isInteger(value) && value >= min && value <= max) {
-        onChange(value);
-      }
-    }}
-    {...props}
-  />
-);
+}) => {
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const input = ref.current;
+    if (input && !(input.validity.valid && input.valueAsNumber === value)) {
+      input.valueAsNumber = value;
+    }
+  }, [value]);
+  return (
+    <input
+      type="number"
+      inputMode="numeric"
+      defaultValue={value}
+      min={min}
+      max={max}
+      required
+      onChange={(event) => {
+        const input = event.target;
+        if (input.validity.valid && input.valueAsNumber !== value) {
+          onChange(input.valueAsNumber);
+        }
+      }}
+      ref={ref}
+      {...props}
+    />
+  );
+};

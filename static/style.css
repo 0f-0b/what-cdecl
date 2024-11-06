@@ -4,8 +4,11 @@ body {
   background-color: lightyellow;
 }
 
-input,
-button {
+code {
+  overflow-wrap: break-word;
+}
+
+input, button {
   font-family: inherit;
   font-size: 13px;
   padding: 0px 2px;

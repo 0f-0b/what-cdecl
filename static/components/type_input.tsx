@@ -1,4 +1,6 @@
-import { React } from "react";
+/* @jsxImportSource react */
+
+import { Fragment, type React } from "react";
 
 import type { TypeSpecifier } from "../c_ast.ts";
 import { type LayerType, layerTypes } from "../layers.ts";
@@ -45,7 +47,7 @@ export const TypeInput: React.FC<TypeInputProps> = ({
       are{" "}
       <span>
         {value.map((layer, index) => (
-          <React.Fragment key={layer.id}>
+          <Fragment key={layer.id}>
             <button
               className="layer removable"
               onClick={() =>
@@ -57,21 +59,21 @@ export const TypeInput: React.FC<TypeInputProps> = ({
               {layerTypes[layer.type].description}
             </button>
             {" "}
-          </React.Fragment>
+          </Fragment>
         ))}
       </span>
       <code>
         {primitive.map((specifier, index) => (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             {index ? " " : ""}
             <DeclarationSpecifierNode ast={specifier} />
-          </React.Fragment>
+          </Fragment>
         ))}
       </code>s.
     </div>
     <div>
       {(Object.keys(layerTypes) as LayerType[]).map((type) => (
-        <React.Fragment key={type}>
+        <Fragment key={type}>
           <button
             className="layer insertable"
             onClick={() =>
@@ -80,7 +82,7 @@ export const TypeInput: React.FC<TypeInputProps> = ({
             {type}
           </button>
           {" "}
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   </>

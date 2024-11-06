@@ -1,6 +1,18 @@
-// @deno-types="npm:@types/react@18"
+// @ts-types="npm:types-react@19.0.0-rc.1"
 export {
-  default as React,
+  act,
+  createContext,
+  type default as React,
+  forwardRef,
+  Fragment,
+  lazy,
+  memo,
+  Profiler,
+  startTransition,
+  StrictMode,
+  Suspense,
+  use,
+  useActionState,
   useCallback,
   useContext,
   useDebugValue,
@@ -11,9 +23,10 @@ export {
   useInsertionEffect,
   useLayoutEffect,
   useMemo,
+  useOptimistic,
   useReducer,
   useRef,
   useState,
   useSyncExternalStore,
   useTransition,
-} from "npm:react@18.2.0";
+} from "npm:react@19.0.0-rc-66855b96-20241106";

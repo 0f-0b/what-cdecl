@@ -1,26 +1,24 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@^0.8.0",
-    "@deno/graph": "jsr:@deno/graph@^0.69.10",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.19.1/mod.ts",
-    "@std/fs": "jsr:@std/fs@^0.221.0",
-    "@std/path": "jsr:@std/path@^0.221.0",
-    "esbuild": "https://deno.land/x/esbuild@v0.20.2/mod.js",
-    "hast-util-to-html": "npm:hast-util-to-html@9.0.0",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@0.13.2",
+    "@deno/graph": "jsr:@deno/graph@^0.84.0",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.20.1/mod.ts",
+    "@std/fs": "jsr:@std/fs@^1.0.0",
+    "@std/path": "jsr:@std/path@^1.0.0",
+    "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js",
+    "hast-util-to-html": "npm:hast-util-to-html@9.0.3",
     "hastscript": "npm:hastscript@8.0.0"
   },
-  "compilerOptions": {
-    "noImplicitOverride": true,
-    "useUnknownInCatchVariables": true
+  "scopes": {
+    "https://jsr.io/@deno/cache-dir/0.13.2/": {
+      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.84.0/types",
+      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.84.0"
+    }
   },
   "exclude": [
-    "dist"
+    "dist",
+    "static"
   ],
-  "fmt": {
-    "exclude": [
-      "**/generated_import_map.json"
-    ]
-  },
   "lint": {
     "rules": {
       "include": [
@@ -29,7 +27,7 @@
     }
   },
   "tasks": {
-    "lint": "deno fmt --check && deno lint && deno check --all scripts/build.tsx",
-    "static:lint": "cd static && deno check main.tsx"
+    "cache": "deno cache --allow-import=deno.land:443,jsr.io:443 scripts/build.tsx",
+    "lint": "deno fmt --check && deno lint && deno check --all --allow-import=deno.land:443,jsr.io:443 scripts/build.tsx"
   }
 }

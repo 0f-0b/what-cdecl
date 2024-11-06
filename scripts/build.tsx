@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read --allow-write --allow-net --allow-env --allow-run
+#!/usr/bin/env -S deno run -A
 
 /* @jsxImportSource hastscript */
 
@@ -10,7 +10,6 @@ import { build, stop } from "esbuild";
 import { toHtml } from "hast-util-to-html";
 
 import { denoCachePlugin } from "./esbuild_deno_cache_plugin.ts";
-import { expandImportMap } from "./expand_import_map.ts";
 
 let dev = false;
 for (const arg of Deno.args) {
@@ -22,17 +21,6 @@ for (const arg of Deno.args) {
   Deno.exit(2);
 }
 Deno.chdir(new URL("..", import.meta.url));
-
-async function generateImportMap(
-  configPath: string,
-  importMapPath: string,
-): Promise<undefined> {
-  const config = JSON.parse(await Deno.readTextFile(configPath));
-  const importMap = expandImportMap(config);
-  await Deno.writeTextFile(importMapPath, JSON.stringify(importMap));
-}
-
-await generateImportMap("static/deno.json", "static/generated_import_map.json");
 await emptyDir("dist");
 const [js, css] = await (async () => {
   const outDir = "dist";
@@ -46,7 +34,8 @@ const [js, css] = await (async () => {
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
       plugins: [denoCachePlugin({
-        importMapURL: toFileUrl(resolve("static/generated_import_map.json")),
+        importMapURL: toFileUrl(resolve("static/deno.json")),
+        expandImportMap: true,
       })],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
@@ -55,6 +44,7 @@ const [js, css] = await (async () => {
       supported: { "nesting": false },
       minify: !dev,
       charset: "utf8",
+      jsx: "automatic",
     });
     const outputs = new Map<string, string>();
     for (const [output, { entryPoint }] of Object.entries(metafile.outputs)) {
@@ -70,27 +60,27 @@ const [js, css] = await (async () => {
   }
 })();
 const html = toHtml(
-  <html lang="en">
-    <head>
-      <meta charset="utf-8" />
-      <meta
-        name="viewport"
-        content="width=device-width,initial-scale=1,shrink-to-fit=no"
-      />
-      <meta name="description" content="Can you read C declarations?" />
-      <title>What cdecl?</title>
-      <link rel="stylesheet" href={css} />
-      <script src={js} type="module" />
-    </head>
-    <body>
-      <div id="root" />
-    </body>
-  </html>,
+  <>
+    {{ type: "doctype" }}
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta name="description" content="Can you read C declarations?" />
+        <title>What cdecl?</title>
+        <link rel="stylesheet" href={css} />
+        <script src={js} type="module" />
+      </head>
+      <body>
+        <div id="root" />
+      </body>
+    </html>
+  </>,
   {
     omitOptionalTags: true,
     preferUnquoted: true,
     quoteSmart: true,
     tightCommaSeparatedLists: true,
+    upperDoctype: true,
   },
 );
-await Deno.writeTextFile("dist/index.html", `<!DOCTYPE html>${html}\n`);
+await Deno.writeTextFile("dist/index.html", html);

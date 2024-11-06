@@ -1,4 +1,6 @@
-import { React } from "react";
+/* @jsxImportSource react */
+
+import { Fragment, type React } from "react";
 
 import {
   type AbstractDeclarator,
@@ -42,26 +44,25 @@ const FunctionNode: React.FC<
   return (
     <>
       {children}({params.map((param, index) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           {index ? ", " : ""}
           <ParameterDeclarationNode ast={param} />
-        </React.Fragment>
+        </Fragment>
       ))})
     </>
   );
 };
-
 type NC<T> = React.FC<{ ast: T }>;
 export const ParameterDeclarationNode: NC<ParameterDeclaration> = ({ ast }) => (
   <>
     {ast.specifiers.map((specifier, index, arr) => (
-      <React.Fragment key={index}>
+      <Fragment key={index}>
         <DeclarationSpecifierNode ast={specifier} />
         {index !== arr.length - 1 || ast.declarator.type.length ||
             "name" in ast.declarator
           ? " "
           : ""}
-      </React.Fragment>
+      </Fragment>
     ))}
     {<DeclaratorNode ast={ast.declarator} />}
   </>
@@ -69,19 +70,19 @@ export const ParameterDeclarationNode: NC<ParameterDeclaration> = ({ ast }) => (
 export const DeclarationNode: NC<Declaration> = ({ ast }) => (
   <>
     {ast.specifiers.map((specifier, index, arr) => (
-      <React.Fragment key={index}>
+      <Fragment key={index}>
         <DeclarationSpecifierNode ast={specifier} />
         {index !== arr.length - 1 || ast.declarators.length ? " " : ""}
-      </React.Fragment>
+      </Fragment>
     ))}
     {ast.declarators.map((declarator, index) =>
-      index
-        ? (
-          <React.Fragment key={index}>
+      index === 0
+        ? <InitDeclaratorNode key={index} ast={declarator} />
+        : (
+          <Fragment key={index}>
             , <InitDeclaratorNode ast={declarator} />
-          </React.Fragment>
+          </Fragment>
         )
-        : <InitDeclaratorNode key={index} ast={declarator} />
     )};
   </>
 );
@@ -97,28 +98,19 @@ export const InitDeclaratorNode: NC<InitDeclarator> = ({ ast }) => (
 export const DeclaratorNode: NC<Declarator | AbstractDeclarator> = ({
   ast,
 }) => {
-  let result = "name" in ast ? <HlVariable>{ast.name}</HlVariable> : null;
-  let wasPointer = false;
-  for (const layer of ast.type) {
-    if (layer.type === "pointer") {
-      wasPointer = true;
-    } else {
-      if (wasPointer) {
-        result = <Parentheses>{result}</Parentheses>;
-      }
-      wasPointer = false;
+  return ast.type.reduce((prev, layer, index, array) => {
+    const wasPointer = index !== 0 && array[index - 1].type === "pointer";
+    const isPointer = layer.type === "pointer";
+    if (wasPointer && !isPointer) {
+      prev = <Parentheses>{prev}</Parentheses>;
     }
     switch (layer.type) {
       case "pointer":
-        result = <PointerNode>{result}</PointerNode>;
-        break;
+        return <PointerNode>{prev}</PointerNode>;
       case "array":
-        result = <ArrayNode size={layer.size}>{result}</ArrayNode>;
-        break;
+        return <ArrayNode size={layer.size}>{prev}</ArrayNode>;
       case "function":
-        result = <FunctionNode params={layer.params}>{result}</FunctionNode>;
-        break;
+        return <FunctionNode params={layer.params}>{prev}</FunctionNode>;
     }
-  }
-  return result;
+  }, "name" in ast ? <HlVariable>{ast.name}</HlVariable> : null);
 };
