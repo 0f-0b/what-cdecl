@@ -1,8 +1,8 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@0.13.2",
-    "@deno/graph": "jsr:@deno/graph@^0.84.0",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.20.1/mod.ts",
+    "@deno/cache-dir": "jsr:@deno/cache-dir@0.14.0",
+    "@deno/graph": "jsr:@deno/graph@^0.86.0",
+    "@deno/import-map": "https://deno.land/x/import_map@v0.21.0/mod.ts",
     "@std/fs": "jsr:@std/fs@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",
     "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js",
@@ -10,13 +10,12 @@
     "hastscript": "npm:hastscript@8.0.0"
   },
   "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.13.2/": {
-      "jsr:/@deno/graph@^0.73.1/types": "jsr:@deno/graph@^0.84.0/types",
-      "jsr:@deno/graph@^0.73.1": "jsr:@deno/graph@^0.84.0"
+    "https://jsr.io/@deno/cache-dir/0.14.0/": {
+      "jsr:/@deno/graph@^0.86.0/types": "jsr:@deno/graph@^0.86.0/types",
+      "jsr:@deno/graph@^0.86.0": "jsr:@deno/graph@^0.86.0"
     }
   },
   "exclude": [
-    "dist",
     "static"
   ],
   "lint": {

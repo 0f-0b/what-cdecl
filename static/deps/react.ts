@@ -1,4 +1,4 @@
-// @ts-types="npm:types-react@19.0.0-rc.1"
+// @ts-types="npm:@types/react@19.0.0"
 export {
   act,
   createContext,
@@ -29,4 +29,4 @@ export {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "npm:react@19.0.0-rc-66855b96-20241106";
+} from "npm:react@19.0.0";
