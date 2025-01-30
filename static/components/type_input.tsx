@@ -48,16 +48,17 @@ export const TypeInput: React.FC<TypeInputProps> = ({
       <span>
         {value.map((layer, index) => (
           <Fragment key={layer.id}>
-            <button
+            <input
+              type="button"
               className="layer removable"
-              onClick={() =>
-                onUpdate([
-                  ...value.slice(0, index),
-                  ...value.slice(index + 1),
-                ])}
-            >
-              {layerTypes[layer.type].description}
-            </button>
+              value={layerTypes[layer.type].description}
+              onClick={() => {
+                // TODO change to `toSpliced` when targeting es2023
+                const newValue = value.slice();
+                newValue.splice(index, 1);
+                onUpdate(newValue);
+              }}
+            />
             {" "}
           </Fragment>
         ))}
@@ -74,13 +75,13 @@ export const TypeInput: React.FC<TypeInputProps> = ({
     <div>
       {(Object.keys(layerTypes) as LayerType[]).map((type) => (
         <Fragment key={type}>
-          <button
+          <input
+            type="button"
             className="layer insertable"
+            value={type}
             onClick={() =>
               onUpdate([...value, makeInputLayer(type)])}
-          >
-            {type}
-          </button>
+          />
           {" "}
         </Fragment>
       ))}

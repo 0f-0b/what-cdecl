@@ -1,4 +1,4 @@
-// @ts-types="npm:@types/react@19.0.0"
+// @ts-types="npm:@types/react@19"
 export {
   act,
   createContext,

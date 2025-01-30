@@ -1,20 +1,20 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@types/react-dom@19.0.0": "19.0.0",
-    "npm:@types/react@19.0.0": "19.0.0",
+    "npm:@types/react-dom@19": "19.0.3_@types+react@19.0.8",
+    "npm:@types/react@19": "19.0.8",
     "npm:react-dom@19.0.0": "19.0.0_react@19.0.0",
     "npm:react@19.0.0": "19.0.0"
   },
   "npm": {
-    "@types/react-dom@19.0.0": {
-      "integrity": "sha512-1KfiQKsH1o00p9m5ag12axHQSb3FOU9H20UTrujVSkNhuCrRHiQWFqgEnTNK5ZNfnzZv8UWrnXVqCmCF9fgY3w==",
+    "@types/react-dom@19.0.3_@types+react@19.0.8": {
+      "integrity": "sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==",
       "dependencies": [
         "@types/react"
       ]
     },
-    "@types/react@19.0.0": {
-      "integrity": "sha512-MY3oPudxvMYyesqs/kW1Bh8y9VqSmf+tzqw3ae8a9DZW68pUe3zAdHeI1jc6iAysuRdACnVknHP8AhwD4/dxtg==",
+    "@types/react@19.0.8": {
+      "integrity": "sha512-9P/o1IGdfmQxrujGbIMDyYaaCykhLKc0NGCtYcECNUr9UAaDe4gwvV9bR6tvd5Br1SG0j+PBpbKr2UYY8CwqSw==",
       "dependencies": [
         "csstype"
       ]

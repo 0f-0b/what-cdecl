@@ -61,12 +61,16 @@ export const App: React.FC = () => {
             }}
           />
         </label>{" "}
-        <button onClick={() => setInput(expected.map(makeInputLayer))}>
-          show solution
-        </button>{" "}
-        <button onClick={reset}>
-          another one
-        </button>
+        <input
+          type="button"
+          value="show solution"
+          onClick={() => setInput(expected.map(makeInputLayer))}
+        />{" "}
+        <input
+          type="button"
+          value="another one"
+          onClick={reset}
+        />
       </div>
     </div>
   );
