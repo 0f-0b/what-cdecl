@@ -1,15 +1,13 @@
 #!/usr/bin/env -S deno run -A
 
+/* @jsxRuntime automatic */
 /* @jsxImportSource hastscript */
 
+import { denoPlugin } from "@deno/esbuild-plugin";
 import { emptyDir } from "@std/fs/empty-dir";
 import { relative } from "@std/path/relative";
-import { resolve } from "@std/path/resolve";
-import { toFileUrl } from "@std/path/to-file-url";
 import { build, stop } from "esbuild";
 import { toHtml } from "hast-util-to-html";
-
-import { denoCachePlugin } from "./esbuild_deno_cache_plugin.ts";
 
 let dev = false;
 for (const arg of Deno.args) {
@@ -33,18 +31,13 @@ const [js, css] = await (async () => {
       outdir: outDir,
       entryNames: "[dir]/[name]-[hash]",
       entryPoints: inputs,
-      plugins: [denoCachePlugin({
-        importMapURL: toFileUrl(resolve("static/deno.json")),
-        expandImportMap: true,
-      })],
+      plugins: [denoPlugin({ configPath: "static/deno.json" })],
       absWorkingDir: Deno.cwd(),
       sourcemap: "linked",
       format: "esm",
-      target: "es2020",
-      supported: { "nesting": false },
+      target: "es2024",
       minify: !dev,
       charset: "utf8",
-      jsx: "automatic",
     });
     const outputs = new Map<string, string>();
     for (const [output, { entryPoint }] of Object.entries(metafile.outputs)) {
@@ -60,6 +53,7 @@ const [js, css] = await (async () => {
   }
 })();
 const html = toHtml(
+  // @ts-expect-error workaround
   <>
     {{ type: "doctype" }}
     <html lang="en">

@@ -1,19 +1,11 @@
 {
   "imports": {
-    "@deno/cache-dir": "jsr:@deno/cache-dir@0.14.0",
-    "@deno/graph": "jsr:@deno/graph@^0.86.0",
-    "@deno/import-map": "https://deno.land/x/import_map@v0.21.0/mod.ts",
+    "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.0",
     "@std/fs": "jsr:@std/fs@^1.0.0",
     "@std/path": "jsr:@std/path@^1.0.0",
-    "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js",
-    "hast-util-to-html": "npm:hast-util-to-html@9.0.3",
-    "hastscript": "npm:hastscript@8.0.0"
-  },
-  "scopes": {
-    "https://jsr.io/@deno/cache-dir/0.14.0/": {
-      "jsr:/@deno/graph@^0.86.0/types": "jsr:@deno/graph@^0.86.0/types",
-      "jsr:@deno/graph@^0.86.0": "jsr:@deno/graph@^0.86.0"
-    }
+    "esbuild": "npm:esbuild@0.25.10",
+    "hast-util-to-html": "npm:hast-util-to-html@9.0.5",
+    "hastscript": "npm:hastscript@9.0.1"
   },
   "exclude": [
     "static"
@@ -26,7 +18,7 @@
     }
   },
   "tasks": {
-    "cache": "deno cache --allow-import=deno.land:443,jsr.io:443 scripts/build.tsx",
-    "lint": "deno fmt --check && deno lint && deno check --all --allow-import=deno.land:443,jsr.io:443 scripts/build.tsx"
+    "cache": "deno cache --allow-import=jsr.io:443 scripts/build.tsx",
+    "lint": "deno fmt --check && deno lint && deno check --all --allow-import=jsr.io:443 scripts/build.tsx"
   }
 }

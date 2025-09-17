@@ -1,13 +1,14 @@
 {
   "imports": {
+    "@types/react": "npm:@types/react@19",
+    "@types/react-dom": "npm:@types/react-dom@19",
     "react": "./deps/react.ts",
-    "react/jsx-runtime": "./deps/react/jsx_runtime.ts",
-    "react-dom/client": "./deps/react_dom/client.ts"
+    "react/": "npm:/react@19.1.1/",
+    "react-dom": "npm:react-dom@19.1.1"
   },
   "compilerOptions": {
     "exactOptionalPropertyTypes": true
   },
-  "nodeModulesDir": "auto",
   "lint": {
     "rules": {
       "include": [

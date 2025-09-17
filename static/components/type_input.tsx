@@ -1,3 +1,4 @@
+/* @jsxRuntime automatic */
 /* @jsxImportSource react */
 
 import { Fragment, type React } from "react";
@@ -49,12 +50,9 @@ export const TypeInput: React.FC<TypeInputProps> = ({
         {value.map((layer, index) => (
           <Fragment key={layer.id}>
             <button
+              type="button"
               className="layer removable"
-              onClick={() =>
-                onUpdate([
-                  ...value.slice(0, index),
-                  ...value.slice(index + 1),
-                ])}
+              onClick={() => onUpdate(value.toSpliced(index, 1))}
             >
               {layerTypes[layer.type].description}
             </button>
@@ -75,6 +73,7 @@ export const TypeInput: React.FC<TypeInputProps> = ({
       {(Object.keys(layerTypes) as LayerType[]).map((type) => (
         <Fragment key={type}>
           <button
+            type="button"
             className="layer insertable"
             onClick={() =>
               onUpdate([...value, makeInputLayer(type)])}
