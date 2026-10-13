@@ -5,9 +5,9 @@
 
 import { denoPlugin } from "@deno/esbuild-plugin";
 import { emptyDir } from "@std/fs/empty-dir";
-import { relative } from "@std/path/relative";
 import { build, stop } from "esbuild";
 import { toHtml } from "hast-util-to-html";
+import { relative } from "node:path";
 
 let dev = false;
 for (const arg of Deno.args) {

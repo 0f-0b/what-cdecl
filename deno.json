@@ -2,19 +2,19 @@
   "imports": {
     "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.0",
     "@std/fs": "jsr:@std/fs@^1.0.0",
-    "@std/path": "jsr:@std/path@^1.0.0",
-    "esbuild": "npm:esbuild@0.25.10",
+    "esbuild": "npm:esbuild@0.28.2",
     "hast-util-to-html": "npm:hast-util-to-html@9.0.5",
     "hastscript": "npm:hastscript@9.0.1"
   },
-  "exclude": [
-    "static"
-  ],
+  "scopes": {
+    "https://jsr.io/@deno/esbuild-plugin/": {
+      "npm:esbuild@^0.25.5": "npm:esbuild@0.28.2"
+    }
+  },
+  "exclude": ["static"],
   "lint": {
     "rules": {
-      "include": [
-        "verbatim-module-syntax"
-      ]
+      "include": ["verbatim-module-syntax"]
     }
   },
   "tasks": {
